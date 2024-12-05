@@ -1,11 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
     <h1>Hello World</h1>
+    <p>내가 굳이 마크다운을 써야하는가?</p>
+    <p>내가 굳이 마크다운을 써야하는가?</p>
+    <p>내가 굳이 마크다운을 써야하는가?</p>
+    <pre>
+        <code class="language-java">
+            import java.io.BufferedReader;
+    import java.io.IOException;
+    import java.io.InputStreamReader;
+    import java.util.*;
+    
+    class Main {
+        //층
+        >>static int[] di = {1, -1, 0, 0, 0, 0};
+        static int[] dj = {0, 0, 1, -1, 0, 0};
+        static int[] dk = {0, 0, 0, 0, 1, -1};
+    
+        static int lowestMoveCount = Integer.MAX_VALUE;
+    
+        public static void main(String[] args) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            List<int[][]> plateList = new ArrayList<>();
+            for (int i = 0; i < 5; i++) {
+    
+                int[][] plate = new int[5][5];
+                for (int j = 0; j < 5; j++) {
+                    StringTokenizer st = new StringTokenizer(br.readLine());
+                    for (int k = 0; k < 5; k++) {
+                        plate[j][k] = Integer.parseInt(st.nextToken());
+                    }
+                }
+                plateList.add(plate);
+            }
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    for (int k = 0; k < 4; k++) {
+                        for (int l = 0; l < 4; l++) {
+                            for (int m = 0; m < 4; m++) {
+                                //이대로 회전시킨후
+                                List<int[][]> plates = new ArrayList<>();
+                                plates.add(cycle(plateList.get(0), i));
+                                plates.add(cycle(plateList.get(1), j));
+                                plates.add(cycle(plateList.get(2), k));
+                                plates.add(cycle(plateList.get(3), l));
+                                plates.add(cycle(plateList.get(4), m));
+    
+                                //판들 순서 0 ~ 4
+                                combination(0,5,new ArrayList<>(),new boolean[5],plates);
+    
+                            }
+                        }
+                    }
+                }
+            }
+    
+            if (lowestMoveCount == Integer.MAX_VALUE) {
+                System.out.println(-1);
+            } else {
+                System.out.println(lowestMoveCount);
+            }
+    
+        }
+    
+        private static int[][] cycle(int[][] map, int cycleCount) {
+            int[][] result = new int[5][5];
+            for (int i = 0; i < 5; i++) {
+                for (int j = 0; j < 5; j++) {
+                    result[i][j] = map[i][j];
+                }
+            }
+    
+            for (int i = 0; i < cycleCount; i++) {
+                int[][] tempMap = new int[5][5];
+                for (int j = 0; j < 5; j++) {
+                    for (int k = 0; k < 5; k++) {
+                        tempMap[k][4 - j] = result[j][k];
+                    }
+                }
+                result = tempMap;
+            }
+            return result;
+        }
+    
+        private static void combination(int depth, int target, List<Integer> box,boolean[] visited,List<int[][]> plates){
+            if (depth == target) {
+                int[][][] map = new int[5][5][5];
+                map[0] = plates.get(box.get(0));
+                map[1] = plates.get(box.get(1));
+                map[2] = plates.get(box.get(2));
+                map[3] = plates.get(box.get(3));
+                map[4] = plates.get(box.get(4));
+                //5! 경우의 수로 쌓고, 시작점 8 개 각각 돌리고
+                bfs(0, 0, 0, 4, 4, 4, map);
+                bfs(0, 0, 4, 4, 4, 0, map);
+                bfs(0, 4, 0, 4, 0, 4, map);
+                bfs(0, 4, 4, 4, 0, 0, map);
+                return;
+            }
+    
+            for (int i = 0; i < 5; i++) {
+                if(visited[i]) continue;
+                visited[i] = true;
+                box.add(i);
+                combination(depth+1,target,box,visited,plates);
+                visited[i] = false;
+                box.remove(box.size() - 1);
+            }
+        }
+    
+        private static void bfs(int i, int j, int k, int l, int m, int n, int[][][] map) {
+            //입구랑 출구 상태 확인
+            if(map[i][j][k] == 0 || map[l][m][n] == 0) return;
+    
+            Queue<int[]> queue = new LinkedList<>();
+            boolean[][][] visited = new boolean[5][5][5];
+    
+            queue.add(new int[]{i, j, k,0});
+            while (!queue.isEmpty()) {
+                int[] now = queue.poll();
+                if (now[0] == l && now[1] == m && now[2] == n) {
+                    lowestMoveCount = Math.min(lowestMoveCount, now[3]);
+                    return;
+                }
+    
+                for (int o = 0; o < 6; o++) {
+                    int ni = di[o] + now[0];
+                    int nj = dj[o] + now[1];
+                    int nk = dk[o] + now[2];
+                    if(ni<0 || ni >=5 ) continue;
+                    if(nj<0 || nj>=5 ) continue;
+                    if(nk<0 || nk >=5 ) continue;
+                    if(map[ni][nj][nk] == 0) continue;
+                    if(visited[ni][nj][nk]) continue;
+    
+                    visited[ni][nj][nk] = true;
+                    queue.add(new int[]{ni, nj, nk, now[3] + 1});
+                }
+            }
+        }
+    }
+        </code>
+    </pre>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </body>
 </html>
