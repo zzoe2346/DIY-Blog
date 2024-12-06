@@ -1,0 +1,88 @@
+/* Reset 기본값 */
+body, h1, h2, p, nav, footer {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* 공통 스타일 */
+body {
+    line-height: 1.2;
+    /*background-color: #f9f9f9;*/
+    color: #333;
+
+    /* 기본 레이아웃 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 전체 화면 높이 사용 */
+    /*padding: 10px 60px;*/
+    padding-top: 80px;
+    box-sizing: border-box;
+    margin: 0;
+
+    /* 중앙 정렬 해제 */
+    align-items: center;
+    justify-content: flex-start;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    position: fixed;
+    background: #ffffff;
+    color: #000000;
+    padding: 10px 20px; /* 좌우 패딩 추가 */
+    text-align: left; /* 중앙에서 왼쪽 정렬로 변경 */
+    top: 0; /* 화면 상단에 고정 */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* 다른 콘텐츠 위에 올 수 있도록 설정 */
+
+    height: 60px;
+    /*border-bottom: 3px solid transparent; !* 기본 경계선 투명 *!*/
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 효과 */
+
+}
+header .title {
+    font-size: 24px;
+}
+nav {
+    display: flex;
+    margin-top: 10px; /* 여백 추가 */
+}
+
+nav a {
+    margin: 0 10px;
+    color: #000000;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+article {
+    background: white;
+    margin: 20px 0; /* 위아래 여백 추가 */
+    padding: 20px; /* 패딩 증가 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-width: 800px; /* 내용 폭 제한 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 시각적 분리감 */
+}
+
+footer {
+    display: flex;
+    text-align: center;
+    align-items: center; /* 세로 가운데 정렬 */
+
+    margin-top: 20px;
+    padding: 10px 20px; /* 좌우 패딩 추가 */
+    font-size: 0.9em;
+    background: #333;
+    color: white;
+    position: relative;
+    width: 100%;
+}
